@@ -23,7 +23,7 @@ typedef struct list base_node;
 
 ## 함수 설명
 
-### 1. `int init(base_node **head);`
+### 1. `int init(&head);`
 
 - 역할: 리스트의 시작 노드를 초기화한다.
 - 정상적으로 작동되었다면 1을, 그렇지 않으면 0을 반환한다.
@@ -37,7 +37,7 @@ init((base_node **)head);
 
 ---
 
-### 2. `void indexing(base_node **head);`
+### 2. `void indexing(&head);`
 
 - 역할: 리스트 내 모든 노드를 처음부터 순회하며 인덱스를 0부터 다시 부여한다.
 - 정상적으로 작동되었다면 1을, 그렇지 않으면 0을 반환한다.
@@ -49,7 +49,7 @@ indexing((base_node **)head);
 
 ---
 
-### 3. `void append(base_node **head, int i);`
+### 3. `void append(&head, int i);`
 
 - 역할: 현재 노드를 기준으로 새 노드를 앞(`-1`)이나 뒤(`1`)에 추가한다.
 - 정상적으로 작동되었다면 1을, 그렇지 않으면 0을 반환한다.
@@ -60,13 +60,13 @@ indexing((base_node **)head);
 - 사용 예:
 
 ```c
-append((base_node **)&head, 1);  // 현재 노드 뒤에 새 노드 추가
-append((base_node **)&head, -1); // 현재 노드 앞에 새 노드 추가
+append(&head, 1);  // 현재 노드 뒤에 새 노드 추가
+append(&head, -1); // 현재 노드 앞에 새 노드 추가
 ```
 
 ---
 
-### 4. `int move(base_node **head, int i);`
+### 4. `int move(&head, int i);`
 
 - 역할: 리스트 내에서 인덱스가 `i`인 노드로 `head` 포인터를 이동한다.
 - 정상적으로 작동되었다면 1을, 그렇지 않으면 0을 반환한다.
@@ -76,7 +76,7 @@ append((base_node **)&head, -1); // 현재 노드 앞에 새 노드 추가
 - 사용 예:
 
 ```c
-if (move((base_node **)&head, 3)) {
+if (move(&head, 3)) {
     printf("인덱스 3 노드로 이동 성공\n");
 } else {
     printf("해당 인덱스 노드가 없음.\n");
@@ -85,7 +85,7 @@ if (move((base_node **)&head, 3)) {
 
 ---
 
-### 5. `void del(base_node **head);`
+### 5. `void del(&head);`
 
 - 역할: 현재 노드의 다음 노드(`head->after`)를 삭제한다.
 - 정상적으로 작동되었다면 1을, 그렇지 않으면 0을 반환한다.
@@ -95,7 +95,7 @@ if (move((base_node **)&head, 3)) {
 - 사용 예:
 
 ```c
-del((base_node **)&head);  // 현재 노드 다음 노드 삭제
+del(&head);  // 현재 노드 다음 노드 삭제
 ```
 
 ---
@@ -116,20 +116,21 @@ struct node
 };
 typedef struct node node;
 
+
 int main()
 {
     node *head = (node *)malloc(sizeof(node));
-    init((base_node **)&head);
+    init(&head);
     head->data = 0;
     
     for (int i = 1; i < 5; i++) {
-        append((base_node **)&head, 1);
+        append(&head, 1);
         head->data = i;
     }
 
-    move((base_node **)&head, 0);
+    move(&head, 0);
     for (int i = 0; i < 5; i++) {
-        if (move((base_node **)&head, i)) {
+        if (move(&head, i)) {
             printf("%d ", head->data);
         } else {
             printf("Index %d not found\n", i);
@@ -144,13 +145,13 @@ int main()
 
 ## 주의 사항
 
-- 함수 호출 시 **반드시 base_node형 이중 포인터(`base_node **`)로 캐스팅하여 전달해야** 한다.
+- 함수 호출 시 **반드시 이중 포인터 형태로 전달해야** 한다.
 
 -사용 예:
 ```c
-append((base_node **)&head, 1);
+append(&head, 1);
 ```
-- 구조체를 확장할 때는 반드시 `base_node`와 동일한 멤버 순서를 유지해야 안전한 형변환이 가능하다. 아래의 코드를 살펴보자.
+- 구조체를 확장할 때는 반드시 `base_node`와 동일한 멤버 순서를 유지해야 안전한 형변환이 가능하다. 아래의 DLL.h파일의 일부 코드를 살펴보자.
 
 ```C
 typedef struct my_node

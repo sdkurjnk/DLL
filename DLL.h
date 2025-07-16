@@ -9,31 +9,35 @@ struct list
 };
 typedef struct list base_node;
 
-int init(base_node **head)
-{
-    if ((*head) == NULL) return 0;
-    (*head)->index = 0;
-    (*head)->before = NULL;
-    (*head)->after = NULL;
-}
+    int init(void *ptr)
+    {
+        base_node **head = (base_node **)ptr;
+        if ((*head) == NULL) return 0;
+        (*head)->index = 0;
+        (*head)->before = NULL;
+        (*head)->after = NULL;
+    }
 
-int indexing(base_node **head)
+int indexing(void *ptr)
 {
-    if ((*head) == NULL) return 0;
+    base_node **head = (base_node **)ptr;
+    if (*head == NULL) return 0;
 
-    while((*head)->before != NULL){
-        (*head) = (*head)->before;
+    base_node *p = *head;
+    while(p->before != NULL){
+        p = p->before;
     }
     int index = 0;
-    while((*head) != NULL){
-        (*head)->index = index++;
-        (*head) = (*head)->after;
+    while(p != NULL){
+        p->index = index++;
+        p = p->after;
     }
     return 1;
 }
 
-int append(base_node **head, int i)
+int append(void *ptr, int i)
 {
+    base_node **head = (base_node **)ptr;
     if (i == 1){ // Forward
         base_node *newNode = (base_node *)malloc(sizeof(base_node));
         newNode->before = *head; newNode->after = NULL;
@@ -66,8 +70,9 @@ int append(base_node **head, int i)
     }
 }
 
-int move(base_node **head, int i)
+int move(void *ptr, int i)
 {
+    base_node **head = (base_node **)ptr;
     if (*head == NULL) return 0;
 
     base_node *p = *head;
@@ -87,8 +92,9 @@ int move(base_node **head, int i)
     return 0;
 }
 
-int del(base_node **head) //Delete next node
+int del(void *ptr) //Delete next node
 {
+    base_node **head = (base_node **)ptr;
     base_node *target = (*head)->after;
     if (target == NULL) return 0;
 
@@ -98,7 +104,7 @@ int del(base_node **head) //Delete next node
     if (B != NULL) B->after = A;
 
     free(target);
-    indexing((base_node **)&head);
+    indexing(head);
 
     return 1;
 }
