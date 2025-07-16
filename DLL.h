@@ -57,6 +57,7 @@ int append(void *ptr, int i)
         }
 
         *head = newNode;
+        indexint(&head);
         return 1;
     }
     else if (i == -1){ // Backward
