@@ -9,14 +9,20 @@ struct list
 };
 typedef struct list base_node;
 
-    int init(void *ptr)
-    {
-        base_node **head = (base_node **)ptr;
-        if ((*head) == NULL) return 0;
-        (*head)->index = 0;
-        (*head)->before = NULL;
-        (*head)->after = NULL;
+int init(void *ptr)
+{
+    base_node **head = (base_node **)ptr;
+    if (*head == NULL) {
+        *head = (base_node *)malloc(sizeof(base_node));
+        if (*head == NULL) return 0;
     }
+
+    (*head)->index = 0;
+    (*head)->before = NULL;
+    (*head)->after = NULL;
+
+    return 1;
+}
 
 int indexing(void *ptr)
 {

@@ -25,7 +25,7 @@ typedef struct list base_node;
 
 ### 1. `int init(&head);`
 
-- 역할: 리스트의 시작 노드를 초기화한다.
+- 역할: 리스트의 시작 노드를 초기화한다. 메모리 할당이 되어있으면 그대로 사용하고, 그렇지 않으면 필요한 만큼 할당한다.
 - 정상적으로 작동되었다면 1을, 그렇지 않으면 0을 반환한다.
 - 동작: `index`를 0으로, `before`와 `after`를 NULL로 설정한다.
 - 사용 예:
@@ -116,10 +116,9 @@ struct node
 };
 typedef struct node node;
 
-
 int main()
 {
-    node *head = (node *)malloc(sizeof(node));
+    node *head;
     init(&head);
     head->data = 0;
     
@@ -139,6 +138,7 @@ int main()
 
     return 0;
 }
+
 ```
 
 ---
